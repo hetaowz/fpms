@@ -1,0 +1,234 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RejectActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="总编号:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="客户名称:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="货物名称:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="货物型号:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="返工工序:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="员工编号:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="返工人员:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="工序单价:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="自编号:" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="#f0ffff"
+                android:gravity="right"
+                android:text="驳回原因:" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:background="@drawable/stroke"
+                android:text="A1F880" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="选择" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="清空" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <Button 
+                android:text="确定"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"/>
+              <Button 
+                  android:text="取消"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
