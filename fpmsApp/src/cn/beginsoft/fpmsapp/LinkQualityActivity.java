@@ -3,10 +3,12 @@ package cn.beginsoft.fpmsapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,10 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class LinkQualityActivity extends Activity {
+public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
 	List<Product> products;
@@ -30,14 +33,42 @@ public class LinkQualityActivity extends Activity {
 		initView();
 		initData();
 		initEvent();
+		menuInit();
 		
 	}
+	
+    private void menuInit(){
+         menuListener();
+         //设置菜单选中颜色
+         TextView bnt_userinfo=(TextView)findViewById(R.id.btn_link_quality);
+         bnt_userinfo.setTextColor(this.getResources().getColor(R.color.green)); 
+         LinearLayout ll_link_quality=(LinearLayout)findViewById(R.id.ll_link_quality);
+         ll_link_quality.setBackgroundColor(this.getResources().getColor(R.color.jblue));
+    }
+    
+	@Override
+	public void menuListener() {
+		// TODO Auto-generated method stub
+		super.menuListener();
+	}
 
-	
-	
+
+
 	private void initView() {
 		listView=(ListView) findViewById(R.id.list_link_quality);
 		
+		
+	}
+	
+	public void createRejectDialog(){
+		AlertDialog dialog=null;
+		AlertDialog.Builder builder=null;
+		View view=LayoutInflater.from(this).inflate(R.layout.dialog_reject, null);
+		
+		builder=new AlertDialog.Builder(this);
+		builder.setView(view);
+		dialog=builder.create();
+		dialog.show();
 	}
 	
 	private void initData() {
@@ -92,7 +123,7 @@ public class LinkQualityActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 		    ViewHolder viewHolder=null;
-			if(viewHolder==null){
+			if(convertView==null){
 				viewHolder=new ViewHolder();
 				mInflater=LayoutInflater.from(context);
 				convertView=mInflater.inflate(R.layout.list_link_quality, null);
@@ -100,22 +131,29 @@ public class LinkQualityActivity extends Activity {
 				viewHolder.textData=(TextView) convertView.findViewById(R.id.text_data);
 				viewHolder.buttonOK=(Button) convertView.findViewById(R.id.button_ok);
 				viewHolder.buttonReject=(Button) convertView.findViewById(R.id.button_reject);
-			    convertView.setTag(viewHolder);
+				viewHolder.buttonReject.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						createRejectDialog();
+					}
+				});
 				
+				convertView.setTag(viewHolder);
 			}else{
 				viewHolder=(ViewHolder) convertView.getTag();
 			}
 			
 			//设置数据
 			Product product=products.get(position);
-			viewHolder.textNum.setText(position);
+			viewHolder.textNum.setText(position+"");
 			viewHolder.textData.setText(product.getCustomerName());
 						
 			return convertView;
 		}
 		
 		
-		class ViewHolder{
+	 class ViewHolder{
 			TextView textNum;
 			TextView textData;
 			Button buttonOK;
