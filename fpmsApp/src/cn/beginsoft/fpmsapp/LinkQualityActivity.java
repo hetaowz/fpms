@@ -3,6 +3,7 @@ package cn.beginsoft.fpmsapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
 
@@ -60,16 +61,7 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 	
-	public void createRejectDialog(){
-		AlertDialog dialog=null;
-		AlertDialog.Builder builder=null;
-		View view=LayoutInflater.from(this).inflate(R.layout.dialog_reject, null);
-		
-		builder=new AlertDialog.Builder(this);
-		builder.setView(view);
-		dialog=builder.create();
-		dialog.show();
-	}
+
 	
 	private void initData() {
 		Product product0=new Product("serialNum", "customerName", "productName", "productVersion", "employeeNum", "employeeName", "processPrice", "selfNum");
@@ -135,7 +127,9 @@ public class LinkQualityActivity extends BaseActivity {
 					
 					@Override
 					public void onClick(View v) {
-						createRejectDialog();
+						Intent intent=new Intent();
+						intent.setClass(LinkQualityActivity.this,RejectActivity.class);
+						startActivity(intent);
 					}
 				});
 				
