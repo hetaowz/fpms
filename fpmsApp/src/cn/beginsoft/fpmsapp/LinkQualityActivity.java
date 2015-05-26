@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.widget.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.ta.util.http.AsyncHttpResponseHandler;
+import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
 
@@ -15,22 +20,18 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
 	List<Product> products;
+	private  Context context;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.context=this;
 		setContentView(R.layout.activity_link_quality);
-		
 		initView();
 		initData();
 		initEvent();
@@ -73,6 +74,24 @@ public class LinkQualityActivity extends BaseActivity {
 		products.add(product1);
 		products.add(product2);
 		products.add(product3);
+		params.put("","");
+		aSyncHttpClient.get(RequestURL.BASEURL + RequestURL.LOGIN, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(String content) {
+				if (!"false".equals(content.trim())) {
+
+					JSONObject jsonObject= JSON.parseObject(content);
+
+				}
+
+			}
+
+			@Override
+			public void onFailure(Throwable error) {
+				Toast.makeText(context, "ÍøÂç·ÃÎÊÒì³££¬¼ì²âÊÇ·ñ¿ªÆôÍøÂç", Toast.LENGTH_SHORT).show();
+			}
+		});
+
 	}
 
 

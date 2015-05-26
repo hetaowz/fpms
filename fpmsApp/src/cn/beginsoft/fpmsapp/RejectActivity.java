@@ -7,8 +7,23 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 public class RejectActivity extends Activity {
+    private TextView textTotalNum;
+    private TextView textCustomerName;
+    private TextView textProductName;
+    private TextView textProductType;
+    private TextView textCustomerNum;
+    private TextView textReprocessEmployee;
+    private TextView textProcessPrice;
+    private TextView textSelfNum;
+    private TextView textRejectReason1;
+    private TextView textRejectReason2;
+    private Spinner spinnerReprocess;
+
+
     private Button buttonSelect;
     private Button buttonClear;
     private Button buttonConfirm;
@@ -47,6 +62,17 @@ public class RejectActivity extends Activity {
         buttonClear = (Button) findViewById(R.id.button_clear);
         buttonConfirm = (Button) findViewById(R.id.button_confirm);
         buttonSelect = (Button) findViewById(R.id.button_select);
+        textTotalNum = (TextView) findViewById(R.id.text_total_counter);
+        textCustomerName = (TextView) findViewById(R.id.text_customer_name);
+        textProductName = (TextView) findViewById(R.id.text_product_name);
+        textProductType = (TextView) findViewById(R.id.text_product_type);
+        textCustomerNum = (TextView) findViewById(R.id.text_customer_num);
+        textReprocessEmployee = (TextView) findViewById(R.id.text_re_process_employee);
+        textProcessPrice = (TextView) findViewById(R.id.text_process_price);
+        textSelfNum = (TextView) findViewById(R.id.text_self_num);
+        textRejectReason1 = (TextView) findViewById(R.id.text_reject_reason1);
+        textRejectReason2 = (TextView) findViewById(R.id.text_reject_reason2);
+        spinnerReprocess = (Spinner) findViewById(R.id.spinner_re_process);
 
 
     }
