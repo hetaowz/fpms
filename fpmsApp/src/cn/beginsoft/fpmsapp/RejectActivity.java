@@ -1,14 +1,25 @@
 package cn.beginsoft.fpmsapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ta.util.http.AsyncHttpClient;
+import com.ta.util.http.AsyncHttpResponseHandler;
+import org.beginsoft.common.RequestURL;
+import org.beginsoft.vo.QualityProduct;
 
 public class RejectActivity extends Activity {
     private TextView textTotalNum;
@@ -53,6 +64,11 @@ public class RejectActivity extends Activity {
     }
 
     private void initDate() {
+        Intent intent=getIntent();
+        Bundle bundle=intent.getExtras();
+        QualityProduct qualityProduct= (QualityProduct) bundle.get("qualityProduct");
+
+
 
     }
 

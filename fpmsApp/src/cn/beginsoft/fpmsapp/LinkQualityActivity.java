@@ -4,33 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.widget.*;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import org.beginsoft.vo.QualityProduct;
 
 public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
-	List<Product> products;
-	private  Context context;
-	
+	List<QualityProduct> qualityProductList;
+	public Handler handler;
+	private AsyncHttpClient mAsyncHttpClient = new AsyncHttpClient();
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.context=this;
+
 		setContentView(R.layout.activity_link_quality);
 		initView();
 		initData();
@@ -65,22 +71,39 @@ public class LinkQualityActivity extends BaseActivity {
 
 	
 	private void initData() {
-		Product product0=new Product("serialNum", "customerName", "productName", "productVersion", "employeeNum", "employeeName", "processPrice", "selfNum");
-		Product product1=new Product("serialNum", "customerName", "productName", "productVersion", "employeeNum", "employeeName", "processPrice", "selfNum");
-		Product product2=new Product("serialNum", "customerName", "productName", "productVersion", "employeeNum", "employeeName", "processPrice", "selfNum");
-		Product product3=new Product("serialNum", "customerName", "productName", "productVersion", "employeeNum", "employeeName", "processPrice", "selfNum");
-	    products=new ArrayList<Product>();
-		products.add(product0);
-		products.add(product1);
-		products.add(product2);
-		products.add(product3);
-		params.put("","");
-		aSyncHttpClient.get(RequestURL.BASEURL + RequestURL.LOGIN, params, new AsyncHttpResponseHandler() {
+
+		mAsyncHttpClient.post(RequestURL.BASEURL + RequestURL.LINKQUALITY, null, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(String content) {
 				if (!"false".equals(content.trim())) {
+					Log.e("content", content);
+					JSONObject jsonObject = JSON.parseObject(content);
+					JSONArray jsonArray=jsonObject.getJSONArray("list");
+					qualityProductList=new ArrayList<QualityProduct>();
 
-					JSONObject jsonObject= JSON.parseObject(content);
+					for(int i=0;i<jsonArray.size();i++){
+
+						JSONObject object=jsonArray.getJSONObject(i);
+						QualityProduct qualityProduct=new QualityProduct();
+						qualityProduct.setAllNumber(object.getString("allNumber"));
+						qualityProduct.setCustomerMark(object.getString("customerMark"));
+						qualityProduct.setEmployeeNumber(object.getString("employeeNumber"));
+						qualityProduct.setFlowLine(object.getString("flowLine"));
+						qualityProduct.setGoodsName(object.getString("goodsName"));
+						qualityProduct.setProcePersonName(object.getString("procePersonName"));
+						qualityProduct.setProceQuantity(object.getString("proceQuantity"));
+						qualityProduct.setProceState(object.getString("proceState"));
+						qualityProduct.setSofaModel(object.getString("sofaModel"));
+						qualityProduct.setSofaName(object.getString("sofaName"));
+						qualityProduct.setZstatu(object.getString("zstatu"));
+						qualityProduct.setWorkShop(object.getString("workShop"));
+						qualityProduct.setThreeProceNum(object.getString("threeProceNum"));
+						qualityProduct.setTwoProceName(object.getString("twoProceName"));
+						qualityProductList.add(qualityProduct);
+						Log.e("qualityProductList",qualityProduct.getAllNumber());
+						handler.sendEmptyMessage(0);
+
+					}
 
 				}
 
@@ -88,7 +111,7 @@ public class LinkQualityActivity extends BaseActivity {
 
 			@Override
 			public void onFailure(Throwable error) {
-				Toast.makeText(context, "ÍøÂç·ÃÎÊÒì³££¬¼ì²âÊÇ·ñ¿ªÆôÍøÂç", Toast.LENGTH_SHORT).show();
+				Toast.makeText(LinkQualityActivity.this, "ÍøÂç·ÃÎÊÒì³££¬¼ì²âÊÇ·ñ¿ªÆôÍøÂç", Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -99,8 +122,17 @@ public class LinkQualityActivity extends BaseActivity {
 
 
 	private void initEvent() {
-		DataAdapter dataAdapter=new DataAdapter(this);
-		listView.setAdapter(dataAdapter);
+
+		handler=new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				if(msg.what==0){
+					DataAdapter dataAdapter=new DataAdapter(LinkQualityActivity.this);
+					listView.setAdapter(dataAdapter);
+				}
+			}
+		};
+
 		
 	}
 	
@@ -118,12 +150,12 @@ public class LinkQualityActivity extends BaseActivity {
 
 		@Override
 		public int getCount() {
-			return products.size();
+			return qualityProductList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return products.get(position);
+			return qualityProductList.get(position);
 		}
 
 		@Override
@@ -132,7 +164,7 @@ public class LinkQualityActivity extends BaseActivity {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 		    ViewHolder viewHolder=null;
 			if(convertView==null){
 				viewHolder=new ViewHolder();
@@ -147,6 +179,9 @@ public class LinkQualityActivity extends BaseActivity {
 					@Override
 					public void onClick(View v) {
 						Intent intent=new Intent();
+						Bundle bundle=new Bundle();
+						bundle.putSerializable("qualityProduct",qualityProductList.get(position));
+						intent.putExtras(bundle);
 						intent.setClass(LinkQualityActivity.this,RejectActivity.class);
 						startActivity(intent);
 					}
@@ -158,9 +193,9 @@ public class LinkQualityActivity extends BaseActivity {
 			}
 			
 			//ÉèÖÃÊý¾Ý
-			Product product=products.get(position);
+			QualityProduct qualityProduct=qualityProductList.get(position);
 			viewHolder.textNum.setText(position+"");
-			viewHolder.textData.setText(product.getCustomerName());
+			viewHolder.textData.setText(qualityProduct.getAllNumber());
 						
 			return convertView;
 		}
