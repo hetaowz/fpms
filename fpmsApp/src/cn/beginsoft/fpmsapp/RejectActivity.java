@@ -73,9 +73,8 @@ public class RejectActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject);
-        this.context=this;
-        initView();
         initDate();
+        initView();
         initEvent();
     }
 
@@ -132,8 +131,7 @@ public class RejectActivity extends BaseActivity {
         textProcessPrice.setText(qualityProduct.getProceQuantity());
         textSelfNum.setText(qualityProduct.getThreeProceNum());
         //≤µªÿ‘≠“Ú
-        textRejectReason1.setText(qualityProduct.getAllNumber());
-        textRejectReason2.setText(qualityProduct.getAllNumber());
+
 
 
 
