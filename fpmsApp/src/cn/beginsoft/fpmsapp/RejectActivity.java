@@ -5,19 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.beginsoft.common.ActiveUser;
-import org.beginsoft.common.EProceState;
-import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import cn.beginsoft.fpmsapp.LinkQualityActivity.DataAdapter.ViewHolder;
 
-import com.ta.util.http.AsyncHttpResponseHandler;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -85,18 +76,22 @@ public class RejectActivity extends BaseActivity {
             public void onClick(View v) {
             	Intent intent=new Intent(RejectActivity.this,RejectReasonActivity.class);
             	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            	startActivity(intent);
+            	startActivityForResult(intent, 0);
             }
         });
-
-
-
-
     }
 
 
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch(resultCode){
+    	case RESULT_OK:
+    		break;
+    	}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
-    private void initDate() {
+	private void initDate() {
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
         qualityProduct= (QualityProduct) bundle.get("qualityProduct");

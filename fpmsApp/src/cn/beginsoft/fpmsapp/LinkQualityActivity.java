@@ -183,6 +183,7 @@ public class LinkQualityActivity extends BaseActivity {
 						bundle.putSerializable("qualityProduct",qualityProductList.get(position));
 						intent.putExtras(bundle);
 						intent.setClass(LinkQualityActivity.this,RejectActivity.class);
+						
 						startActivity(intent);
 					}
 				});

@@ -17,7 +17,6 @@ public class RequestURL {
 	//驳回原因数据
 	public static final String QUALITY="SfPpzjianControllerForApp.do?datagridForReasonApp&interfaceName=datagridForApp";
 
-
 	public static final String LINKQUALITY="SfPpzjianControllerForApp.do?datagridForApp&interfaceName=datagridForApp";
 	public static final String REJECTREASON="SfPpzjianControllerForApp.do?datagridForReasonApp&interfaceName=datagridForApp";
 	public static final String REPROCESS="SfPpzjianControllerForApp.do?datagridForProcessApp&interfaceName=datagridForApp";

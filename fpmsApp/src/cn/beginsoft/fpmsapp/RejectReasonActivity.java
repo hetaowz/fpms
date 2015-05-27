@@ -21,9 +21,11 @@ import com.ta.util.http.AsyncHttpResponseHandler;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -32,7 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RejectReasonActivity extends BaseActivity {
+public class RejectReasonActivity extends BaseActivity implements OnClickListener{
 	private Context context=null;
 	private ListView mListView=null;
 	private TextView mTotalNum;
@@ -42,7 +44,13 @@ public class RejectReasonActivity extends BaseActivity {
 	private Button btn_ok;
 	private Button btn_cancel;
 	private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-   
+	
+	private Map<String, String> map=new HashMap<String, String>();
+	//定义每一页显示的行数
+	private int mRow=7;
+	//定义的页数
+	private int index=0;
+	MyRejectAdapter mAdapter;
     /*此处json用于获取质量金额列表*/
 	private JSONObject jsonObject=null;
 	private JSONArray jsonArray=null;
@@ -58,13 +66,15 @@ public class RejectReasonActivity extends BaseActivity {
     }
 
     private void initEvent() {
-        
-
-
+    	mPreview.setOnClickListener(this);
+    	mNext.setOnClickListener(this);
+    	btn_ok.setOnClickListener(this);
+    	btn_cancel.setOnClickListener(this);
     }
 
     private void initData() {
     	dataFill();
+    	
     }
 
     private void initView() {
@@ -82,7 +92,69 @@ public class RejectReasonActivity extends BaseActivity {
     	
     }
 
-    /**
+    @Override
+	public void onClick(View v) {
+    	switch (v.getId()) {
+		case R.id.btn_preview:
+			preView();
+			break;
+		case R.id.btn_next:
+			nextView();
+			break;
+		case R.id.reject_ok:
+			chooseMassQus();
+			break;
+		case R.id.reject_cancel:
+			finish();
+			break;
+		}
+	}
+    
+    private void chooseMassQus() {
+    	Intent intent = null;
+    	//intent 传递参数
+    	this.setResult(RESULT_OK, intent);
+    	this.finish();
+	}
+
+	private void nextView() {
+    	index++;
+    	mCurrentNum.setText("current:" + String.valueOf(index));
+    	
+		//重新更新数据
+		mAdapter.notifyDataSetChanged();
+		checkView();
+	}
+
+	private void preView() {
+		index--;
+		mCurrentNum.setText("current:" + String.valueOf(index));
+		//重新更新数据
+		mAdapter.notifyDataSetChanged();
+		checkView();
+	}
+
+	public void checkView() {
+		if (index <= 0) {
+			//如果页数小于0就让preButton不能点击
+			mPreview.setEnabled(false);
+			if (list.size() <= mRow) {
+				//如果总长度小于行数就让nextButton不能点击
+				mNext.setEnabled(false);
+			}else{
+				mNext.setEnabled(true);
+			}
+		} else if (list.size() - index * mRow <= mRow) {
+			//当当前数据前进到最后一页的时候就让nextButton不能点击
+			mNext.setEnabled(false);
+			mPreview.setEnabled(true);
+		} else {
+			mPreview.setEnabled(true);
+			mNext.setEnabled(true);
+		}
+	}
+
+	/**
      * 数据初始化填充驳回原因listview
      */
     private void dataFill() {
@@ -114,15 +186,15 @@ public class RejectReasonActivity extends BaseActivity {
     private void setListView() {
 		 if(jsonArray!=null){
 			    JSONObject temp;
-			    Map<String, String> map;
+			    Map<String, String> map1;
 			    for(int position=0;position<jsonArray.length();position++){
 					try {
 						temp = (JSONObject)jsonArray.get(position);
-					    map = new HashMap<String, String>(); 
-					    map.put("gdamage", temp.getString("gdamage"));
-		                map.put("massQus", temp.getString("massQus"));
-					    map.put("monly", temp.getString("monly"));
-					    this.list.add(map);
+					    map1 = new HashMap<String, String>(); 
+					    map1.put("gdamage", temp.getString("gdamage"));
+		                map1.put("massQus", temp.getString("massQus"));
+					    map1.put("monly", temp.getString("monly"));
+					    this.list.add(map1);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -131,8 +203,11 @@ public class RejectReasonActivity extends BaseActivity {
 			    		Toast.makeText(context,"暂无数据", Toast.LENGTH_SHORT).show(); 
 			    }
 		    Log.i(TAG, list.toString());
-		 	MyRejectAdapter simpleAdapter=new MyRejectAdapter(this);
-		 	this.mListView.setAdapter(simpleAdapter);
+		 	mAdapter=new MyRejectAdapter(this);
+		 	this.mListView.setAdapter(mAdapter);
+		 	mTotalNum.setText("total:" + String.valueOf(list.size()));
+	    	mCurrentNum.setText("current:" + String.valueOf(index));
+	    	checkView();
 	}
     
     private class MyRejectAdapter extends BaseAdapter{
@@ -142,10 +217,21 @@ public class RejectReasonActivity extends BaseActivity {
 			super();
 			this.context=context;
 		}
+		public void notifyDataSetChanged() {
+			// TODO Auto-generated method stub
+			//每次清空数据，重新填充
+//			list.clear();
+			super.notifyDataSetChanged();
+		}
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return list == null ? 0 : list.size();
+			if (list.size() - mRow * index < mRow) {
+				return list.size() - mRow * index;
+			} else {
+				return mRow;
+			}
+//			return list == null ? 0 : list.size();
 		}
 
 		@Override
@@ -163,6 +249,9 @@ public class RejectReasonActivity extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder viewHolder=null;
+			if(list!=null){
+				map=list.get(position + index * mRow);
+			}
 			if(convertView==null){
 				viewHolder=new ViewHolder();
 				mInflater=LayoutInflater.from(context);
@@ -179,15 +268,15 @@ public class RejectReasonActivity extends BaseActivity {
 				viewHolder=(ViewHolder) convertView.getTag();
 			}
 		    
-		    JSONObject temp ;
+//		    JSONObject temp ;
 			    try {
-			    	temp = (JSONObject)jsonArray.get(position);
+//			    	temp = (JSONObject)jsonArray.get(position);
 			    	viewHolder.textNum.setText(position+1+"");
-			    	viewHolder.textTypeName.setText(temp.getString("gdamage"));
+			    	viewHolder.textTypeName.setText(map.get("gdamage"));
 			    	
-			    	viewHolder.textMassQus.setText(temp.getString("massQus"));
-			    	viewHolder.textMoney.setText(temp.getString("monly"));
-				} catch (JSONException e) {
+			    	viewHolder.textMassQus.setText(map.get("massQus"));
+			    	viewHolder.textMoney.setText(map.get("monly"));
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 		    
@@ -202,5 +291,7 @@ public class RejectReasonActivity extends BaseActivity {
 				TextView textMoney;
 			}
     }
+
+	
 
 }
