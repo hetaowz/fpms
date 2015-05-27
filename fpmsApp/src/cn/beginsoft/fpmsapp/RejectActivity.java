@@ -1,15 +1,41 @@
 package cn.beginsoft.fpmsapp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.beginsoft.common.ActiveUser;
+import org.beginsoft.common.EProceState;
+import org.beginsoft.common.RequestURL;
+import org.beginsoft.fpmsapp.base.BaseActivity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cn.beginsoft.fpmsapp.LinkQualityActivity.DataAdapter.ViewHolder;
+
+import com.ta.util.http.AsyncHttpResponseHandler;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +47,11 @@ import com.ta.util.http.AsyncHttpResponseHandler;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.vo.QualityProduct;
 
-public class RejectActivity extends Activity {
+
+public class RejectActivity extends BaseActivity {
+	private Context context=null;
+	private ListView mListView=null;
+	private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
     private TextView textTotalNum;
     private TextView textCustomerName;
     private TextView textProductName;
@@ -39,14 +69,17 @@ public class RejectActivity extends Activity {
     private Button buttonClear;
     private Button buttonConfirm;
     private Button buttonCancel;
-
-
+    /*此处json用于获取质量金额列表*/
+	private JSONObject jsonObject=null;
+	private JSONArray jsonArray=null;
+	private static final String TAG="SOFT";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject);
+        this.context=this;
         initView();
-        initDate();
+        initData();
         initEvent();
     }
 
@@ -55,18 +88,25 @@ public class RejectActivity extends Activity {
         buttonSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createRejectDialog();
 
+            	Intent intent=new Intent(RejectActivity.this,RejectReasonActivity.class);
+            	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            	startActivity(intent);
             }
         });
 
 
     }
 
+
+    private void initData() {
+    	
+
     private void initDate() {
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
         QualityProduct qualityProduct= (QualityProduct) bundle.get("qualityProduct");
+
 
 
 
@@ -90,26 +130,7 @@ public class RejectActivity extends Activity {
         textRejectReason2 = (TextView) findViewById(R.id.text_reject_reason2);
         spinnerReprocess = (Spinner) findViewById(R.id.spinner_re_process);
 
-
     }
 
-    private void createRejectDialog() {
-        AlertDialog dialog;
-        AlertDialog.Builder builder = null;
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_reject, null);
-        builder = new AlertDialog.Builder(RejectActivity.this);
-        builder.setView(view);
-        dialog = builder.create();
-        dialog.show();
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.reject, menu);
-        return true;
-    }
 
 }
