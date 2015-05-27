@@ -34,17 +34,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.ta.util.http.AsyncHttpClient;
-import com.ta.util.http.AsyncHttpResponseHandler;
-import org.beginsoft.common.RequestURL;
+
 import org.beginsoft.vo.QualityProduct;
 
 
@@ -69,17 +62,20 @@ public class RejectActivity extends BaseActivity {
     private Button buttonClear;
     private Button buttonConfirm;
     private Button buttonCancel;
-    /*此处json用于获取质量金额列表*/
-	private JSONObject jsonObject=null;
-	private JSONArray jsonArray=null;
-	private static final String TAG="SOFT";
+
+
+    private QualityProduct qualityProduct;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject);
         this.context=this;
         initView();
-        initData();
+        initDate();
         initEvent();
     }
 
@@ -88,7 +84,6 @@ public class RejectActivity extends BaseActivity {
         buttonSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             	Intent intent=new Intent(RejectActivity.this,RejectReasonActivity.class);
             	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             	startActivity(intent);
@@ -96,20 +91,16 @@ public class RejectActivity extends BaseActivity {
         });
 
 
+
+
     }
 
 
-    private void initData() {
-    	
 
     private void initDate() {
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
-        QualityProduct qualityProduct= (QualityProduct) bundle.get("qualityProduct");
-
-
-
-
+        qualityProduct= (QualityProduct) bundle.get("qualityProduct");
     }
 
     private void initView() {
@@ -128,7 +119,23 @@ public class RejectActivity extends BaseActivity {
         textSelfNum = (TextView) findViewById(R.id.text_self_num);
         textRejectReason1 = (TextView) findViewById(R.id.text_reject_reason1);
         textRejectReason2 = (TextView) findViewById(R.id.text_reject_reason2);
+        //返工工序
         spinnerReprocess = (Spinner) findViewById(R.id.spinner_re_process);
+
+
+        textTotalNum.setText(qualityProduct.getAllNumber());
+        textCustomerName.setText(qualityProduct.getAllNumber());
+        textProductName.setText(qualityProduct.getGoodsName());
+        textProductType.setText(qualityProduct.getSofaModel());
+        textCustomerNum.setText(qualityProduct.getEmployeeNumber());
+        textReprocessEmployee.setText(qualityProduct.getProcePersonName());
+        textProcessPrice.setText(qualityProduct.getProceQuantity());
+        textSelfNum.setText(qualityProduct.getThreeProceNum());
+        //驳回原因
+        textRejectReason1.setText(qualityProduct.getAllNumber());
+        textRejectReason2.setText(qualityProduct.getAllNumber());
+
+
 
     }
 
