@@ -9,6 +9,11 @@ import org.beginsoft.fpmsapp.base.BaseActivity;
 
 
 
+
+
+
+
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,14 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
 import android.widget.Spinner;
 
+import org.beginsoft.vo.MassQus;
 import org.beginsoft.vo.QualityProduct;
 
 
@@ -60,13 +63,15 @@ public class RejectActivity extends BaseActivity {
 
 
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject);
         initDate();
         initView();
         initEvent();
+       
     }
 
     private void initEvent() {
@@ -76,19 +81,28 @@ public class RejectActivity extends BaseActivity {
             public void onClick(View v) {
             	Intent intent=new Intent(RejectActivity.this,RejectReasonActivity.class);
             	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            	startActivityForResult(intent, 0);
+            	startActivityForResult(intent, 1);
             }
         });
     }
 
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	switch(resultCode){
-    	case RESULT_OK:
-    		break;
-    	}
-		super.onActivityResult(requestCode, resultCode, data);
+    		ArrayList<MassQus> mList =  (ArrayList<MassQus>) data.getSerializableExtra("massList");
+//    		List<Map<String,String>> listMap = new ArrayList<Map<String,String>>();
+//    		listMap =(List<Map<String, String>>) data.getSerializableExtra("massList");
+//    		for(int i=0;i<listMap.size();i++){
+//    			Map<String,String>map=listMap.get(i);
+//    			String question=map.get("massQus");
+//    			String money=map.get("monly");
+//    			Log.i("RESULT", "get=="+question+","+money);
+//    		}
+    		for(int i=0;i<mList.size();i++){  
+    			MassQus mass = mList.get(i);  
+    	         Log.i("RESULT", "GET=====" + mass.getMassQus() + "," + mass.getMonly());  
+    	     }  		
 	}
 
 	private void initDate() {

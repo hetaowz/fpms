@@ -1,5 +1,6 @@
 package cn.beginsoft.fpmsapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.beginsoft.common.ActiveUser;
 import org.beginsoft.common.EProceState;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
+import org.beginsoft.vo.MassQus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,9 +29,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +53,9 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 	private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 	
 	private Map<String, String> map=new HashMap<String, String>();
+	//intent 传递的list
+//	private List<Map<String, String>> massList = new ArrayList<Map<String, String>>();
+	private ArrayList<MassQus> massList = new ArrayList<MassQus>();
 	//定义每一页显示的行数
 	private int mRow=7;
 	//定义的页数
@@ -111,8 +121,20 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 	}
     
     private void chooseMassQus() {
-    	Intent intent = null;
+    	Intent intent = new Intent();
     	//intent 传递参数
+    	//打印massList
+    	for(int i=0;i<massList.size();i++){
+//    		Map<String, String>map= massList.get(i); 
+//    		String question=map.get("massQus");
+//    		String money=map.get("monly");
+    		MassQus mass = massList.get(i);  
+			String question=mass.getMassQus();
+			String money=mass.getMonly();
+			Log.i("RESULT", "put==="+question+","+money);
+		}
+    	intent.setClass(RejectReasonActivity.this, RejectActivity.class);
+    	intent.putExtra("massList", (Serializable)massList);
     	this.setResult(RESULT_OK, intent);
     	this.finish();
 	}
@@ -154,6 +176,8 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
+	
+	
 	/**
      * 数据初始化填充驳回原因listview
      */
@@ -207,7 +231,7 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 		 	this.mListView.setAdapter(mAdapter);
 		 	mTotalNum.setText("total:" + String.valueOf(list.size()));
 	    	mCurrentNum.setText("current:" + String.valueOf(index));
-	    	checkView();
+	    	checkView();	    	
 	}
     
     private class MyRejectAdapter extends BaseAdapter{
@@ -249,8 +273,9 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder viewHolder=null;
+			final int pos=position + index * mRow;
 			if(list!=null){
-				map=list.get(position + index * mRow);
+				map=list.get(pos);
 			}
 			if(convertView==null){
 				viewHolder=new ViewHolder();
@@ -271,11 +296,27 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 //		    JSONObject temp ;
 			    try {
 //			    	temp = (JSONObject)jsonArray.get(position);
-			    	viewHolder.textNum.setText(position+1+"");
-			    	viewHolder.textTypeName.setText(map.get("gdamage"));
-			    	
+			    	viewHolder.textNum.setText(pos+1+"");
+			    	viewHolder.textTypeName.setText(map.get("gdamage"));			    	
 			    	viewHolder.textMassQus.setText(map.get("massQus"));
 			    	viewHolder.textMoney.setText(map.get("monly"));
+			    	viewHolder.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			    		MassQus massQus;
+//			    		Map<String, String>massMap;
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							if(isChecked){
+								massQus=new MassQus();
+//								massMap= massList.get(pos); 
+//								massMap.put("massQus", list.get(pos).get("massQus"));
+//								massMap.put("monly", list.get(pos).get("monly"));
+//								massList.add(massMap);
+								massQus.setMassQus(list.get(pos).get("massQus"));
+								massQus.setMonly(list.get(pos).get("monly"));
+								massList.add(massQus);
+//								Log.i("RESULT", "put==="+massMap.get("massQus")+","+massMap.get("monly"));
+							}
+						}
+					});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
