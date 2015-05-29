@@ -53,8 +53,6 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 	private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 	
 	private Map<String, String> map=new HashMap<String, String>();
-	//intent 传递的list
-//	private List<Map<String, String>> massList = new ArrayList<Map<String, String>>();
 	private ArrayList<MassQus> massList = new ArrayList<MassQus>();
 	//定义每一页显示的行数
 	private int mRow=7;
@@ -123,11 +121,7 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
     private void chooseMassQus() {
     	Intent intent = new Intent();
     	//intent 传递参数
-    	//打印massList
     	for(int i=0;i<massList.size();i++){
-//    		Map<String, String>map= massList.get(i); 
-//    		String question=map.get("massQus");
-//    		String money=map.get("monly");
     		MassQus mass = massList.get(i);  
 			String question=mass.getMassQus();
 			String money=mass.getMonly();
@@ -302,18 +296,12 @@ public class RejectReasonActivity extends BaseActivity implements OnClickListene
 			    	viewHolder.textMoney.setText(map.get("monly"));
 			    	viewHolder.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			    		MassQus massQus;
-//			    		Map<String, String>massMap;
 						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 							if(isChecked){
 								massQus=new MassQus();
-//								massMap= massList.get(pos); 
-//								massMap.put("massQus", list.get(pos).get("massQus"));
-//								massMap.put("monly", list.get(pos).get("monly"));
-//								massList.add(massMap);
 								massQus.setMassQus(list.get(pos).get("massQus"));
 								massQus.setMonly(list.get(pos).get("monly"));
 								massList.add(massQus);
-//								Log.i("RESULT", "put==="+massMap.get("massQus")+","+massMap.get("monly"));
 							}
 						}
 					});

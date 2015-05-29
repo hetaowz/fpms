@@ -91,14 +91,6 @@ public class RejectActivity extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     		ArrayList<MassQus> mList =  (ArrayList<MassQus>) data.getSerializableExtra("massList");
-//    		List<Map<String,String>> listMap = new ArrayList<Map<String,String>>();
-//    		listMap =(List<Map<String, String>>) data.getSerializableExtra("massList");
-//    		for(int i=0;i<listMap.size();i++){
-//    			Map<String,String>map=listMap.get(i);
-//    			String question=map.get("massQus");
-//    			String money=map.get("monly");
-//    			Log.i("RESULT", "get=="+question+","+money);
-//    		}
     		for(int i=0;i<mList.size();i++){  
     			MassQus mass = mList.get(i);  
     	         Log.i("RESULT", "GET=====" + mass.getMassQus() + "," + mass.getMonly());  

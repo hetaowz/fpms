@@ -5,7 +5,7 @@ public class RequestURL {
 	public static int ConnectTimeout = 30;
 	public static int ReadTimeout = 60;
 	//public static final String BASEURL="http://mngc402.oicp.net:36256/fpms/";
-	public static final String BASEURL="http://182.254.240.108:8080/fpms/";
+	public static final String BASEURL="http://182.254.240.108:8084/fpms/";
 	//µÇÂ¼Controller
 	public static final String LOGIN="loginController.do?loginForApp&interfaceName=datagridForApp";
 	//¹«¸æController
