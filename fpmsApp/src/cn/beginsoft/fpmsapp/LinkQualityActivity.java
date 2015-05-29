@@ -8,11 +8,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.*;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
+
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
@@ -23,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+
 import org.beginsoft.vo.QualityProduct;
 
 public class LinkQualityActivity extends BaseActivity {
@@ -64,7 +67,10 @@ public class LinkQualityActivity extends BaseActivity {
 
 	private void initView() {
 		listView=(ListView) findViewById(R.id.list_link_quality);
-		
+		View view=LayoutInflater.from(this).inflate(R.layout.list_link_quality, null);
+    	view.findViewById(R.id.button_reject).setVisibility(View.INVISIBLE);
+    	view.findViewById(R.id.button_ok).setVisibility(View.INVISIBLE);
+    	listView.addHeaderView(view);
 		
 	}
 	
@@ -170,8 +176,20 @@ public class LinkQualityActivity extends BaseActivity {
 				viewHolder=new ViewHolder();
 				mInflater=LayoutInflater.from(context);
 				convertView=mInflater.inflate(R.layout.list_link_quality, null);
-				viewHolder.textNum=(TextView) convertView.findViewById(R.id.text_num);
-				viewHolder.textData=(TextView) convertView.findViewById(R.id.text_data);
+				viewHolder.allNumber=(TextView) convertView.findViewById(R.id.tv_check_allNumber);
+				viewHolder.workShop=(TextView) convertView.findViewById(R.id.tv_check_workShop);
+				viewHolder.flowLine=(TextView) convertView.findViewById(R.id.tv_check_flowLine);
+				viewHolder.zstatu=(TextView) convertView.findViewById(R.id.tv_check_zstatu);
+				viewHolder.proceState=(TextView) convertView.findViewById(R.id.tv_check_proceState);
+				viewHolder.sofaName=(TextView) convertView.findViewById(R.id.tv_check_sofaName);
+				viewHolder.sofaModel=(TextView) convertView.findViewById(R.id.tv_check_sofaModel);
+				viewHolder.goodsName=(TextView) convertView.findViewById(R.id.tv_check_goodsName);
+				viewHolder.employeeNumber=(TextView) convertView.findViewById(R.id.tv_check_employeeNumber);
+				viewHolder.procePersonName=(TextView) convertView.findViewById(R.id.tv_check_procePersonName);
+				viewHolder.threeProceNum=(TextView) convertView.findViewById(R.id.tv_check_twoProceNum);
+				viewHolder.twoProceName=(TextView) convertView.findViewById(R.id.tv_check_twoProceName);
+				viewHolder.proceQuantity=(TextView) convertView.findViewById(R.id.tv_check_proce);
+				viewHolder.customerMark=(TextView) convertView.findViewById(R.id.tv_check_customerMark);
 				viewHolder.buttonOK=(Button) convertView.findViewById(R.id.button_ok);
 				viewHolder.buttonReject=(Button) convertView.findViewById(R.id.button_reject);
 				viewHolder.buttonReject.setOnClickListener(new View.OnClickListener() {
@@ -195,16 +213,42 @@ public class LinkQualityActivity extends BaseActivity {
 			
 			//…Ë÷√ ˝æ›
 			QualityProduct qualityProduct=qualityProductList.get(position);
-			viewHolder.textNum.setText(position+"");
-			viewHolder.textData.setText(qualityProduct.getAllNumber());
-						
+//			viewHolder.textNum.setText(position+"");
+//			viewHolder.textData.setText(qualityProduct.getAllNumber());
+			viewHolder.allNumber.setText(qualityProduct.getAllNumber());
+			viewHolder.workShop.setText(qualityProduct.getWorkShop());
+			viewHolder.flowLine.setText(qualityProduct.getFlowLine());
+			viewHolder.zstatu.setText(qualityProduct.getZstatu());
+			viewHolder.proceState.setText(qualityProduct.getProceState());
+			viewHolder.sofaName.setText(qualityProduct.getSofaName());
+			viewHolder.sofaModel.setText(qualityProduct.getSofaModel());
+			viewHolder.goodsName.setText(qualityProduct.getGoodsName());
+			viewHolder.employeeNumber.setText(qualityProduct.getEmployeeNumber());
+			viewHolder.procePersonName.setText(qualityProduct.getProcePersonName());
+			viewHolder.threeProceNum.setText(qualityProduct.getThreeProceNum());
+			viewHolder.twoProceName.setText(qualityProduct.getTwoProceName());
+			viewHolder.proceQuantity.setText(qualityProduct.getProceQuantity());
+			viewHolder.customerMark.setText(qualityProduct.getCustomerMark());
+			
 			return convertView;
 		}
 		
 		
 	 class ViewHolder{
-			TextView textNum;
-			TextView textData;
+			TextView allNumber;
+			TextView workShop;
+			TextView flowLine;
+			TextView zstatu;
+			TextView proceState;
+			TextView sofaName;
+			TextView sofaModel;
+			TextView goodsName;
+			TextView employeeNumber;
+			TextView procePersonName;
+			TextView threeProceNum;
+			TextView twoProceName;
+			TextView proceQuantity;
+			TextView customerMark;
 			Button buttonOK;
 			Button buttonReject;
 		}

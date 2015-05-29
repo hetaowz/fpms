@@ -5,6 +5,7 @@
      >
      
      <!--标题  -->
+     <!--  
 <LinearLayout
         android:id="@+id/title_main"
         android:layout_width="fill_parent"
@@ -30,9 +31,29 @@
             android:text="用户名"
             android:textColor="@color/black"
              />
+   </LinearLayout>
+   -->
+        <RelativeLayout
+			        android:id="@+id/title_main"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentTop="true"
+			        android:background="@drawable/head_bg" >
+			        <TextView
+			            style="@style/style_title"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			     	    android:layout_centerVertical="true"
+			            android:text="质检检验" />
+			        <Spinner 
+			            android:layout_alignParentRight="true"
+						android:id="@+id/spn_active_user_check"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" />
+			 </RelativeLayout>
         
-        
- </LinearLayout>
+
     <LinearLayout 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
