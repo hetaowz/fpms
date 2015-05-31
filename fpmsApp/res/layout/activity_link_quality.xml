@@ -2,37 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-     >
-     
+     >   
      <!--标题  -->
-     <!--  
-<LinearLayout
-        android:id="@+id/title_main"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:background="@drawable/head_bg" >
-
-    <TextView
-        style="@style/style_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="10dp"
-        android:text="质检检验" />
-   <TextView
-            style="@style/style_title"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:background="@color/white"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="10dp"
-            android:text="用户名"
-            android:textColor="@color/black"
-             />
-   </LinearLayout>
-   -->
         <RelativeLayout
 			        android:id="@+id/title_main"
 			        android:layout_width="fill_parent"

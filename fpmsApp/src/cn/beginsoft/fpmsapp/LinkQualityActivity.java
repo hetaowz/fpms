@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.*;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -15,9 +16,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
 
+import org.beginsoft.common.ActiveUser;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
+import org.beginsoft.vo.UserSpn;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -31,7 +34,12 @@ import org.beginsoft.vo.QualityProduct;
 public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
+	private Context context=null;
 	List<QualityProduct> qualityProductList;
+	//当前活动用户的下拉列表
+	private Spinner spnActiveUser = null; 
+	//对应的适配器
+	private ArrayAdapter<UserSpn> adapterActiveUser = null; 
 	public Handler handler;
 	private AsyncHttpClient mAsyncHttpClient = new AsyncHttpClient();
 
@@ -39,22 +47,80 @@ public class LinkQualityActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_link_quality);
+		this.context=this;
 		initView();
+		LoginCheck();
+		menuInit();
 		initData();
 		initEvent();
-		menuInit();
-		
 	}
 	
+    /**
+     * 判断用户是否登录
+     */
+    private void LoginCheck(){
+    	if(ActiveUser.currentUser==null){
+    		
+			Intent intent = new Intent(context,LoginActivity.class);  
+			//参数传递, 如果是此处跳转的，显示：请先登录的提示
+			intent.putExtra("loginShow", "true");
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+            //跳转Activity  
+            startActivityForResult(intent, 0); 
+    	}
+    }
+    
     private void menuInit(){
          menuListener();
+         activeUserInit();
          //设置菜单选中颜色
          TextView bnt_userinfo=(TextView)findViewById(R.id.btn_link_quality);
          bnt_userinfo.setTextColor(this.getResources().getColor(R.color.green)); 
          LinearLayout ll_link_quality=(LinearLayout)findViewById(R.id.ll_link_quality);
          ll_link_quality.setBackgroundColor(this.getResources().getColor(R.color.jblue));
+    }
+    
+    /**
+	 * 已登录用户下拉列表初始化
+	 */
+    private void activeUserInit(){
+    	this.spnActiveUser = (Spinner) super.findViewById(R.id.spn_active_user_check); // 取得下拉框
+ 		this.spnActiveUser.setPrompt("请选择要切换的用户：");
+ 		this.adapterActiveUser = new ArrayAdapter<UserSpn>(this,
+ 				android.R.layout.simple_spinner_item, ActiveUser.activeUserList); // 准备好下拉列表框的内容
+ 		this.adapterActiveUser 
+ 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // 换个风格
+ 		this.spnActiveUser.setAdapter(this.adapterActiveUser);
+ 		//默认值设为当前用户
+ 		this.spnActiveUser.setSelection(ActiveUser.getCurrentUserPostion());
+ 		
+ 		//添加事件Spinner事件监听
+ 		this.spnActiveUser.setOnItemSelectedListener(new OnItemSelectedListener(){
+ 			boolean isFirst = true;
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				//首次加载不执行
+				if(isFirst){
+					isFirst=false;
+				}else{
+					 	ActiveUser.currentUser=ActiveUser.activeUserList.get(arg2);
+						//刷新界面
+						Intent intent = new Intent(context,TaskStartingActivity.class);  
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
+		                //跳转Activity  
+		                startActivityForResult(intent, 0); 
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+ 			
+ 		});
     }
     
 	@Override

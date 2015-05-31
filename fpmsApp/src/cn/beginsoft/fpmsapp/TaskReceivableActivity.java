@@ -19,6 +19,7 @@ import com.ta.util.http.AsyncHttpResponseHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -209,6 +210,7 @@ public class TaskReceivableActivity extends BaseActivity {
 			    map.put("proceTheoryTime", temp.getString("proceTheoryTime"));
 			    map.put("specialModel", temp.getString("specialModel"));
 			    map.put("customerMark", temp.getString("customerMark"));
+			    map.put("alternate", temp.getString("alternate"));
 			    this.list.add(map);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -255,7 +257,7 @@ public class TaskReceivableActivity extends BaseActivity {
 		    TextView tv_proceTheoryTime = (TextView) convertView.findViewById(R.id.tv_proceTheoryTime);
 		    TextView specialModel = (TextView) convertView.findViewById(R.id.specialModel);
 		    TextView tv_customerMark = (TextView) convertView.findViewById(R.id.tv_customerMark);
-			
+		    Button start = (Button)convertView.findViewById(R.id.start_btn);
 	    	    JSONObject temp ;
 			    try {
 			    	temp = (JSONObject)jsonArray.get(position);
@@ -269,7 +271,12 @@ public class TaskReceivableActivity extends BaseActivity {
 			    	tv_proceTheoryTime.setText(temp.getString("proceTheoryTime"));
 			    	specialModel.setText(temp.getString("specialModel"));
 			    	tv_customerMark.setText(temp.getString("customerMark"));
-			    	formatProceState(convertView,temp.getString("proceState"),temp.getString("id"));
+			    	if(temp.getString("alternate").equals("1")){
+			    		start.setEnabled(false);
+			    	}
+			    	else if(temp.getString("alternate").equals("0")){
+			    		formatProceState(convertView,temp.getString("proceState"),temp.getString("id"));
+			    	}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
