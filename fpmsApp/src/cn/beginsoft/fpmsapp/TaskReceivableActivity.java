@@ -272,9 +272,12 @@ public class TaskReceivableActivity extends BaseActivity {
 			    	specialModel.setText(temp.getString("specialModel"));
 			    	tv_customerMark.setText(temp.getString("customerMark"));
 			    	if(temp.getString("alternate").equals("1")){
-			    		start.setEnabled(false);
+			    		start.setFocusable(false);
+			    		start.setFocusableInTouchMode(false);
 			    	}
 			    	else if(temp.getString("alternate").equals("0")){
+			    		start.setFocusable(true);
+			    		start.setFocusableInTouchMode(true);
 			    		formatProceState(convertView,temp.getString("proceState"),temp.getString("id"));
 			    	}
 				} catch (JSONException e) {

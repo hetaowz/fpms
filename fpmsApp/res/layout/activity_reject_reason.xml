@@ -14,6 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:paddingLeft="5dp"
             android:text="质量检验配置表" />
  	</LinearLayout>
 
@@ -38,6 +39,7 @@
          android:layout_width="0dp"
          android:layout_weight="1"
          android:layout_height="wrap_content"
+         android:gravity="center_horizontal"
          android:text="total"/>
       <Button
 	        android:id="@+id/btn_preview"
@@ -57,6 +59,7 @@
          android:id="@+id/current_number"
          android:layout_width="0dp"
          android:layout_weight="1"
+         android:gravity="center_horizontal"
          android:layout_height="wrap_content"
          android:text="current"/>
 	</LinearLayout>
@@ -69,6 +72,7 @@
 	        android:id="@+id/reject_ok"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:layout_marginRight="20dp"
 	        android:layout_toLeftOf="@+id/reject_cancel"
 	        android:background="@drawable/button_selector"
 	        android:text="确定"/>
@@ -77,6 +81,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="10dp"
 	        android:background="@drawable/button_selector"
 	        android:text="取消"/>
 	</RelativeLayout>

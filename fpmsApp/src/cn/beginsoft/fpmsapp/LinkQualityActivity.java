@@ -2,33 +2,29 @@ package cn.beginsoft.fpmsapp;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
-
 import org.beginsoft.common.ActiveUser;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.Product;
 import org.beginsoft.vo.UserSpn;
-
 import android.os.Bundle;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-
 import org.beginsoft.vo.QualityProduct;
 
 public class LinkQualityActivity extends BaseActivity {
@@ -53,7 +49,7 @@ public class LinkQualityActivity extends BaseActivity {
 		LoginCheck();
 		menuInit();
 		initData();
-		initEvent();
+		initEvent();		
 	}
 	
     /**
@@ -107,7 +103,7 @@ public class LinkQualityActivity extends BaseActivity {
 				}else{
 					 	ActiveUser.currentUser=ActiveUser.activeUserList.get(arg2);
 						//刷新界面
-						Intent intent = new Intent(context,TaskStartingActivity.class);  
+						Intent intent = new Intent(context,LinkQualityActivity.class);  
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
 		                //跳转Activity  
 		                startActivityForResult(intent, 0); 
@@ -143,7 +139,6 @@ public class LinkQualityActivity extends BaseActivity {
 
 	
 	private void initData() {
-
 		mAsyncHttpClient.post(RequestURL.BASEURL + RequestURL.LINKQUALITY, null, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(String content) {
@@ -193,6 +188,7 @@ public class LinkQualityActivity extends BaseActivity {
 
 
 
+	@SuppressLint("HandlerLeak")
 	private void initEvent() {
 
 		handler=new Handler(){
@@ -279,8 +275,6 @@ public class LinkQualityActivity extends BaseActivity {
 			
 			//设置数据
 			QualityProduct qualityProduct=qualityProductList.get(position);
-//			viewHolder.textNum.setText(position+"");
-//			viewHolder.textData.setText(qualityProduct.getAllNumber());
 			viewHolder.allNumber.setText(qualityProduct.getAllNumber());
 			viewHolder.workShop.setText(qualityProduct.getWorkShop());
 			viewHolder.flowLine.setText(qualityProduct.getFlowLine());
@@ -321,21 +315,5 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 
-
-
-
-
-
-
-
-
-
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.link_quality, menu);
-		return true;
-	}
 
 }
