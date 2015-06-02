@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.*;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.ta.util.http.AsyncHttpClient;
+import com.ta.util.http.AsyncHttpResponseHandler;
+import org.beginsoft.common.RequestURL;
 
 import org.beginsoft.fpmsapp.base.BaseActivity;
-
-
-
-
-
-
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.TextView;
+
 import android.widget.Spinner;
+
 
 import org.beginsoft.vo.MassQus;
 import org.beginsoft.vo.QualityProduct;
+import org.beginsoft.vo.Reprocess;
 
 
 public class RejectActivity extends BaseActivity {
@@ -58,7 +58,10 @@ public class RejectActivity extends BaseActivity {
     private Button buttonCancel;
 
 
+
     private QualityProduct qualityProduct;
+    List<Reprocess> reprocessList;
+    private Handler handler;
 
 
 
@@ -84,6 +87,17 @@ public class RejectActivity extends BaseActivity {
             	startActivityForResult(intent, 1);
             }
         });
+
+        handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what==0){
+                    ReprocessAdapter reprocessAdapter =new ReprocessAdapter(RejectActivity.this);
+                    spinnerReprocess.setAdapter(reprocessAdapter);
+                }
+            }
+        };
+
     }
 
 
@@ -98,9 +112,38 @@ public class RejectActivity extends BaseActivity {
 	}
 
 	private void initDate() {
+
         Intent intent=getIntent();
         Bundle bundle=intent.getExtras();
         qualityProduct= (QualityProduct) bundle.get("qualityProduct");
+        aSyncHttpClient.post(RequestURL.BASEURL+RequestURL.REPROCESS, params,new AsyncHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(String content)
+            {
+                if(!"false".equals(content.trim())){
+                    JSONObject jsonObject= JSON.parseObject(content);
+                    JSONArray jsonArray=jsonObject.getJSONArray("list");
+                    reprocessList=new ArrayList<Reprocess>();
+                    for(int i=0;i<jsonArray.size();i++){
+                        JSONObject object=jsonArray.getJSONObject(i);
+                        Reprocess reprocess=new Reprocess();
+                        reprocess.setBeforeProcessId(object.getString("beforeProcessId"));
+                        reprocess.setBeforeProcessName(object.getString("beforeProcessName"));
+                        reprocessList.add(reprocess);
+                        handler.sendEmptyMessage(0);
+                        Log.e("reprocessList",reprocess.getBeforeProcessName());
+                }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable error)
+            {
+                Toast.makeText(context, "网络访问异常，检测是否开启网络", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initView() {
@@ -124,7 +167,7 @@ public class RejectActivity extends BaseActivity {
 
 
         textTotalNum.setText(qualityProduct.getAllNumber());
-        textCustomerName.setText(qualityProduct.getAllNumber());
+        textCustomerName.setText(qualityProduct.getCustomerName());
         textProductName.setText(qualityProduct.getGoodsName());
         textProductType.setText(qualityProduct.getSofaModel());
         textCustomerNum.setText(qualityProduct.getEmployeeNumber());
@@ -134,8 +177,53 @@ public class RejectActivity extends BaseActivity {
         //驳回原因
 
 
+    }
 
+    class ReprocessAdapter extends  BaseAdapter{
+        LayoutInflater mInflater;
+        Context context;
 
+        public ReprocessAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return reprocessList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return reprocessList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder viewHolder=null;
+            if(convertView==null){
+                viewHolder=new ViewHolder();
+                mInflater= LayoutInflater.from(context);
+                convertView=mInflater.inflate(R.layout.spinner_reprocess, null);
+                viewHolder.textView=(TextView) convertView.findViewById(R.id.text_reprocess_name);
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder=(ViewHolder) convertView.getTag();
+            }
+
+            //设置数据
+            viewHolder.textView.setText(reprocessList.get(position).getBeforeProcessName());
+            return convertView;
+        }
+
+        class ViewHolder{
+            public TextView textView;
+        }
     }
 
 
