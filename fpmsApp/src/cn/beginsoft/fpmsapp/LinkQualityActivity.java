@@ -3,6 +3,7 @@ package cn.beginsoft.fpmsapp;
 import java.util.ArrayList;
 import java.util.List;
 import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -12,12 +13,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
 import org.beginsoft.common.ActiveUser;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
-import org.beginsoft.vo.Product;
 import org.beginsoft.vo.UserSpn;
 import android.os.Bundle;
 import android.content.Context;
@@ -37,8 +36,6 @@ public class LinkQualityActivity extends BaseActivity {
 	//∂‘”¶µƒ  ≈‰∆˜
 	private ArrayAdapter<UserSpn> adapterActiveUser = null; 
 	public Handler handler;
-	private AsyncHttpClient mAsyncHttpClient = new AsyncHttpClient();
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +118,8 @@ public class LinkQualityActivity extends BaseActivity {
     
 	@Override
 	public void menuListener() {
-		// TODO Auto-generated method stub
 		super.menuListener();
 	}
-
-
 
 	private void initView() {
 		listView=(ListView) findViewById(R.id.list_link_quality);
@@ -135,11 +129,9 @@ public class LinkQualityActivity extends BaseActivity {
     	listView.addHeaderView(view);
 		
 	}
-	
 
-	
 	private void initData() {
-		mAsyncHttpClient.post(RequestURL.BASEURL + RequestURL.LINKQUALITY, null, new AsyncHttpResponseHandler() {
+		aSyncHttpClient.post(RequestURL.BASEURL + RequestURL.LINKQUALITY, null, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(String content) {
 				if (!"false".equals(content.trim())) {
@@ -166,10 +158,10 @@ public class LinkQualityActivity extends BaseActivity {
 						qualityProduct.setWorkShop(object.getString("workShop"));
 						qualityProduct.setThreeProceNum(object.getString("threeProceNum"));
 						qualityProduct.setTwoProceName(object.getString("twoProceName"));
+						qualityProduct.setCustomerName(object.getString("customerName"));
 						qualityProductList.add(qualityProduct);
 						Log.e("qualityProductList",qualityProduct.getAllNumber());
 						handler.sendEmptyMessage(0);
-
 					}
 
 				}
@@ -184,10 +176,6 @@ public class LinkQualityActivity extends BaseActivity {
 
 	}
 
-
-
-
-
 	@SuppressLint("HandlerLeak")
 	private void initEvent() {
 
@@ -200,12 +188,8 @@ public class LinkQualityActivity extends BaseActivity {
 				}
 			}
 		};
-
-		
 	}
-	
-	
-	
+
 	class DataAdapter extends BaseAdapter{
 		LayoutInflater mInflater;
 		Context context;
@@ -262,8 +246,7 @@ public class LinkQualityActivity extends BaseActivity {
 						Bundle bundle=new Bundle();
 						bundle.putSerializable("qualityProduct",qualityProductList.get(position));
 						intent.putExtras(bundle);
-						intent.setClass(LinkQualityActivity.this,RejectActivity.class);
-						
+
 						startActivity(intent);
 					}
 				});
