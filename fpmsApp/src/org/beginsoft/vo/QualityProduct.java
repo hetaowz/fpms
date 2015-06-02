@@ -21,6 +21,16 @@ public class QualityProduct implements Serializable{
     private String twoProceName;
     private String proceQuantity;
     private String customerMark;
+    private String customerName;
+
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public String getAllNumber() {
         return allNumber;
