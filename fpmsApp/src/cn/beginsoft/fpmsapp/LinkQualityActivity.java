@@ -30,12 +30,13 @@ public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
 	private Context context=null;
-	List<QualityProduct> qualityProductList;
+	List<QualityProduct> qualityProductList=new ArrayList<QualityProduct>();
 	//当前活动用户的下拉列表
 	private Spinner spnActiveUser = null; 
 	//对应的适配器
 	private ArrayAdapter<UserSpn> adapterActiveUser = null; 
 	public Handler handler;
+	private DataAdapter dataAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class LinkQualityActivity extends BaseActivity {
 
 						JSONObject object=jsonArray.getJSONObject(i);
 						QualityProduct qualityProduct=new QualityProduct();
+						qualityProduct.setId(object.getString("id"));
 						qualityProduct.setAllNumber(object.getString("allNumber"));
 						qualityProduct.setCustomerMark(object.getString("customerMark"));
 						qualityProduct.setEmployeeNumber(object.getString("employeeNumber"));
@@ -183,7 +185,7 @@ public class LinkQualityActivity extends BaseActivity {
 			@Override
 			public void handleMessage(Message msg) {
 				if(msg.what==0){
-					DataAdapter dataAdapter=new DataAdapter(LinkQualityActivity.this);
+					dataAdapter=new DataAdapter(LinkQualityActivity.this);
 					listView.setAdapter(dataAdapter);
 				}
 			}
@@ -193,7 +195,11 @@ public class LinkQualityActivity extends BaseActivity {
 	class DataAdapter extends BaseAdapter{
 		LayoutInflater mInflater;
 		Context context;
-		
+
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+		}
 
 		public DataAdapter(Context context) {
 			super();
@@ -238,18 +244,6 @@ public class LinkQualityActivity extends BaseActivity {
 				viewHolder.customerMark=(TextView) convertView.findViewById(R.id.tv_check_customerMark);
 				viewHolder.buttonOK=(Button) convertView.findViewById(R.id.button_ok);
 				viewHolder.buttonReject=(Button) convertView.findViewById(R.id.button_reject);
-				viewHolder.buttonReject.setOnClickListener(new View.OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						Intent intent=new Intent();
-						Bundle bundle=new Bundle();
-						bundle.putSerializable("qualityProduct",qualityProductList.get(position));
-						intent.putExtras(bundle);
-
-						startActivity(intent);
-					}
-				});
 				
 				convertView.setTag(viewHolder);
 			}else{
@@ -257,7 +251,8 @@ public class LinkQualityActivity extends BaseActivity {
 			}
 			
 			//设置数据
-			QualityProduct qualityProduct=qualityProductList.get(position);
+			final QualityProduct qualityProduct=qualityProductList.get(position);
+
 			viewHolder.allNumber.setText(qualityProduct.getAllNumber());
 			viewHolder.workShop.setText(qualityProduct.getWorkShop());
 			viewHolder.flowLine.setText(qualityProduct.getFlowLine());
@@ -272,6 +267,61 @@ public class LinkQualityActivity extends BaseActivity {
 			viewHolder.twoProceName.setText(qualityProduct.getTwoProceName());
 			viewHolder.proceQuantity.setText(qualityProduct.getProceQuantity());
 			viewHolder.customerMark.setText(qualityProduct.getCustomerMark());
+
+			viewHolder.buttonOK.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					JSONObject qualityProductJson=new JSONObject();
+					JSONObject qualityJson=new JSONObject();
+					qualityProductJson.put("qualityProductId", qualityProduct.getId());
+					qualityProductJson.put("allNumber", qualityProduct.getAllNumber());
+					qualityProductJson.put("workShop", qualityProduct.getWorkShop());
+					qualityProductJson.put("flowLine", qualityProduct.getFlowLine());
+					qualityProductJson.put("zstatu", qualityProduct.getZstatu());
+					qualityProductJson.put("proceState", "3");
+					qualityProductJson.put("sofaName", qualityProduct.getSofaName());
+					qualityProductJson.put("sofaModel", qualityProduct.getSofaModel());
+					qualityProductJson.put("employeeNumber", qualityProduct.getEmployeeNumber());
+					qualityProductJson.put("procePersonName", qualityProduct.getProcePersonName());
+					qualityProductJson.put("threeProceNum", qualityProduct.getThreeProceNum());
+					qualityProductJson.put("twoProceName", qualityProduct.getTwoProceName());
+					qualityProductJson.put("proceQuantity", qualityProduct.getProceQuantity());
+					qualityProductJson.put("customerMark", qualityProduct.getCustomerMark());
+					qualityJson.put("qualityJson",qualityProductJson);
+					Log.e("qualityJson",qualityJson.toString());
+					params.put("qualityProductJson",qualityProductJson.toString());
+					aSyncHttpClient.post(RequestURL.BASEURL + RequestURL.QUALITYCONFIRM, params, new AsyncHttpResponseHandler() {
+						@Override
+						public void onSuccess(String content) {
+							if (!"false".equals(content.trim())) {
+								finish();
+
+							}
+
+						}
+
+						@Override
+						public void onFailure(Throwable error) {
+							Toast.makeText(LinkQualityActivity.this, "网络访问异常，检测是否开启网络", Toast.LENGTH_SHORT).show();
+						}
+					});
+
+				}
+			});
+
+
+			viewHolder.buttonReject.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent intent=new Intent();
+					Bundle bundle=new Bundle();
+					intent.setClass(LinkQualityActivity.this,RejectActivity.class);
+					bundle.putSerializable("qualityProduct",qualityProductList.get(position));
+					intent.putExtras(bundle);
+					startActivity(intent);
+				}
+			});
 			
 			return convertView;
 		}
@@ -298,5 +348,5 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 
-
+	
 }

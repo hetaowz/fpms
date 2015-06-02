@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class QualityProduct implements Serializable{
 
+    private String id;
     private String allNumber;
     private String workShop;
     private String flowLine;
@@ -23,6 +24,13 @@ public class QualityProduct implements Serializable{
     private String customerMark;
     private String customerName;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCustomerName() {
         return customerName;

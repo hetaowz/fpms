@@ -8,6 +8,24 @@ import java.io.Serializable;
 public class Reprocess implements Serializable{
     private String beforeProcessId;
     private String beforeProcessName;
+    private String threeProcessCode;
+    private String threeProcessName;
+
+    public String getThreeProcessCode() {
+        return threeProcessCode;
+    }
+
+    public void setThreeProcessCode(String threeProcessCode) {
+        this.threeProcessCode = threeProcessCode;
+    }
+
+    public String getThreeProcessName() {
+        return threeProcessName;
+    }
+
+    public void setThreeProcessName(String threeProcessName) {
+        this.threeProcessName = threeProcessName;
+    }
 
     public String getBeforeProcessId() {
         return beforeProcessId;

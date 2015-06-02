@@ -9,11 +9,9 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ta.util.http.AsyncHttpClient;
 import com.ta.util.http.AsyncHttpResponseHandler;
 import org.beginsoft.common.RequestURL;
 
@@ -63,6 +61,19 @@ public class RejectActivity extends BaseActivity {
     List<Reprocess> reprocessList;
     private Handler handler;
 
+    //驳回原因
+    private ArrayList<MassQus> mList;
+    private String rejectReason1=" ";
+    private String rejectReason2=" ";
+
+//    提交网络数据
+    private JSONObject allJson;
+    private JSONObject rejectJson;
+    private JSONObject qualityProductJson;
+    private JSONObject reprocessJson;
+    private JSONObject rejectReasonJson;
+
+
 
 
 
@@ -87,16 +98,112 @@ public class RejectActivity extends BaseActivity {
             	startActivityForResult(intent, 1);
             }
         });
+        //清空驳回原因
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mList.clear();
+                textRejectReason1.setText(" ");
+                textRejectReason2.setText(" ");
+            }
+        });
+
+        spinnerReprocess.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                reprocessJson=new JSONObject();
+                reprocessJson.put("beforeProcessId", reprocessList.get(position).getBeforeProcessId());
+                reprocessJson.put("threeProcessCode",reprocessList.get(position).getThreeProcessCode());
+                reprocessJson.put("threeProcessName",reprocessList.get(position).getThreeProcessName());
+                Log.e("reprocessJson",reprocessJson.toString());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what==0){
-                    ReprocessAdapter reprocessAdapter =new ReprocessAdapter(RejectActivity.this);
-                    spinnerReprocess.setAdapter(reprocessAdapter);
-                }
+               switch (msg.what){
+                   case 0:
+                       ReprocessAdapter reprocessAdapter =new ReprocessAdapter(RejectActivity.this);
+                       spinnerReprocess.setAdapter(reprocessAdapter);
+                       break;
+                   case 1:
+                       textRejectReason1.setText(rejectReason1);
+                       textRejectReason2.setText(rejectReason2);
+                       break;
+                   default:
+                       break;
+               }
+
             }
         };
+
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qualityProductJson = new JSONObject();
+                qualityProductJson.put("qualityProductId", qualityProduct.getId());
+                qualityProductJson.put("allNumber", qualityProduct.getAllNumber());
+                qualityProductJson.put("workShop", qualityProduct.getWorkShop());
+                qualityProductJson.put("flowLine", qualityProduct.getFlowLine());
+                qualityProductJson.put("zstatu", qualityProduct.getZstatu());
+                qualityProductJson.put("proceState", "5");
+                qualityProductJson.put("sofaName", qualityProduct.getSofaName());
+                qualityProductJson.put("sofaModel", qualityProduct.getSofaModel());
+                qualityProductJson.put("employeeNumber", qualityProduct.getEmployeeNumber());
+                qualityProductJson.put("procePersonName", qualityProduct.getProcePersonName());
+                qualityProductJson.put("threeProceNum", qualityProduct.getThreeProceNum());
+                qualityProductJson.put("twoProceName", qualityProduct.getTwoProceName());
+                qualityProductJson.put("proceQuantity", qualityProduct.getProceQuantity());
+                qualityProductJson.put("customerMark", qualityProduct.getCustomerMark());
+                Log.e("qualityProductJson", qualityProductJson.toString());
+//                提交网络数据的根节点
+                allJson=new JSONObject();
+                rejectJson = new JSONObject();
+                rejectJson.put("qualityProductJson", qualityProductJson);
+                rejectJson.put("reprocessJson", reprocessJson);
+                rejectJson.put("rejectReasonJson", rejectReasonJson);
+                allJson.put("allJson", rejectJson);
+                Log.e("allJson",allJson.toString());
+
+
+                params.put("rejectJson", rejectJson.toString());
+                aSyncHttpClient.post(RequestURL.BASEURL + RequestURL.REJECTCONFIRM, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(String content) {
+                        if (!"false".equals(content.trim())) {
+                            finish();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable error) {
+                        Toast.makeText(context, "网络访问异常，检测是否开启网络", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            }
+        });
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reprocessList.clear();
+                mList.clear();
+                rejectJson.clear();
+                Intent intent=new Intent();
+                intent.setClass(RejectActivity.this,LinkQualityActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -104,11 +211,25 @@ public class RejectActivity extends BaseActivity {
     @SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    		ArrayList<MassQus> mList =  (ArrayList<MassQus>) data.getSerializableExtra("massList");
+    	    mList =  (ArrayList<MassQus>) data.getSerializableExtra("massList");
+            JSONArray massAraay=new JSONArray();
     		for(int i=0;i<mList.size();i++){  
-    			MassQus mass = mList.get(i);  
-    	         Log.i("RESULT", "GET=====" + mass.getMassQus() + "," + mass.getMonly());  
-    	     }  		
+    			MassQus mass = mList.get(i);
+//                提交到网络
+                JSONObject massObject=new JSONObject();
+                massObject.put("massQus",mass.getMassQus());
+                massObject.put("monly",mass.getMonly());
+                massAraay.add(massObject);
+
+//                传到UI线程
+                rejectReason1=rejectReason1+","+mass.getMassQus();
+                rejectReason2=rejectReason2+","+mass.getMonly();
+                handler.sendEmptyMessage(1);
+    	        Log.e("RESULT", "GET=====" +rejectReason1 + "," + rejectReason2);
+    	     }
+            rejectReasonJson=new JSONObject();
+            rejectReasonJson.put("rejectReasonJson",massAraay);
+            Log.e("rejectReasonJson", massAraay.toString());
 	}
 
 	private void initDate() {
@@ -130,9 +251,11 @@ public class RejectActivity extends BaseActivity {
                         Reprocess reprocess=new Reprocess();
                         reprocess.setBeforeProcessId(object.getString("beforeProcessId"));
                         reprocess.setBeforeProcessName(object.getString("beforeProcessName"));
+                        reprocess.setThreeProcessCode(object.getString("threeProcessCode"));
+                        reprocess.setThreeProcessName(object.getString("threeProcessName"));
                         reprocessList.add(reprocess);
                         handler.sendEmptyMessage(0);
-                        Log.e("reprocessList",reprocess.getBeforeProcessName());
+
                 }
                 }
 
@@ -174,8 +297,6 @@ public class RejectActivity extends BaseActivity {
         textReprocessEmployee.setText(qualityProduct.getProcePersonName());
         textProcessPrice.setText(qualityProduct.getProceQuantity());
         textSelfNum.setText(qualityProduct.getThreeProceNum());
-        //驳回原因
-
 
     }
 
@@ -217,7 +338,9 @@ public class RejectActivity extends BaseActivity {
             }
 
             //设置数据
-            viewHolder.textView.setText(reprocessList.get(position).getBeforeProcessName());
+            final  Reprocess reprocess=reprocessList.get(position);
+            viewHolder.textView.setText(reprocess.getThreeProcessName());
+
             return convertView;
         }
 
@@ -225,6 +348,5 @@ public class RejectActivity extends BaseActivity {
             public TextView textView;
         }
     }
-
 
 }
