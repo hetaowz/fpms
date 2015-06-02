@@ -103,6 +103,8 @@ public class RejectActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mList.clear();
+                rejectReason1="";
+                rejectReason2="";
                 textRejectReason1.setText(" ");
                 textRejectReason2.setText(" ");
             }
@@ -134,8 +136,8 @@ public class RejectActivity extends BaseActivity {
                        spinnerReprocess.setAdapter(reprocessAdapter);
                        break;
                    case 1:
-                       textRejectReason1.setText(rejectReason1);
-                       textRejectReason2.setText(rejectReason2);
+                       textRejectReason1.setText(rejectReason1.substring(0, rejectReason1.length()-1));
+                       textRejectReason2.setText(rejectReason2.substring(0, rejectReason2.length()-1));
                        break;
                    default:
                        break;
@@ -222,8 +224,8 @@ public class RejectActivity extends BaseActivity {
                 massAraay.add(massObject);
 
 //                传到UI线程
-                rejectReason1=rejectReason1+","+mass.getMassQus();
-                rejectReason2=rejectReason2+","+mass.getMonly();
+                rejectReason1=rejectReason1+mass.getMassQus()+",";
+                rejectReason2=rejectReason2+mass.getMonly()+",";
                 handler.sendEmptyMessage(1);
     	        Log.e("RESULT", "GET=====" +rejectReason1 + "," + rejectReason2);
     	     }
