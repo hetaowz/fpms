@@ -15,10 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ta.util.http.AsyncHttpResponseHandler;
 import org.beginsoft.common.RequestURL;
-
 import org.beginsoft.fpmsapp.base.BaseActivity;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

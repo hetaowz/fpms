@@ -186,6 +186,7 @@ public class LinkQualityActivity extends BaseActivity {
 				if(msg.what==0){
 					DataAdapter dataAdapter=new DataAdapter(LinkQualityActivity.this);
 					listView.setAdapter(dataAdapter);
+					dataAdapter.notifyDataSetChanged();
 				}
 			}
 		};
@@ -343,5 +344,10 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 
-
+//	@Override
+//	protected void onStart() {
+//		super.onStart();
+//		qualityProductList.clear();
+//		initData();
+//	}
 }
