@@ -192,10 +192,15 @@ public class RejectActivity extends BaseActivity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reprocessList.clear();
-                mList.clear();
-                rejectJson.clear();
-                finish();
+                try {
+                    reprocessList.clear();
+                    mList.clear();
+                    rejectJson.clear();
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
