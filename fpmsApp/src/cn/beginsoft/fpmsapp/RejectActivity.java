@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -34,9 +35,9 @@ import org.beginsoft.vo.Reprocess;
 
 
 public class RejectActivity extends BaseActivity {
-	private Context context=null;
-	private ListView mListView=null;
-	private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+    private Context context = null;
+    private ListView mListView = null;
+    private List<Map<String, String>> list = new ArrayList<Map<String, String>>();
     private TextView textTotalNum;
     private TextView textCustomerName;
     private TextView textProductName;
@@ -56,17 +57,16 @@ public class RejectActivity extends BaseActivity {
     private Button buttonCancel;
 
 
-
     private QualityProduct qualityProduct;
     List<Reprocess> reprocessList;
     private Handler handler;
 
     //驳回原因
     private ArrayList<MassQus> mList;
-    private String rejectReason1=" ";
-    private String rejectReason2=" ";
+    private String rejectReason1 = " ";
+    private String rejectReason2 = " ";
 
-//    提交网络数据
+    //    提交网络数据
     private JSONObject allJson;
     private JSONObject rejectJson;
     private JSONObject qualityProductJson;
@@ -74,18 +74,15 @@ public class RejectActivity extends BaseActivity {
     private JSONObject rejectReasonJson;
 
 
-
-
-
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject);
         initDate();
         initView();
         initEvent();
-       
+
     }
 
     private void initEvent() {
@@ -93,9 +90,9 @@ public class RejectActivity extends BaseActivity {
         buttonSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Intent intent=new Intent(RejectActivity.this,RejectReasonActivity.class);
-            	intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            	startActivityForResult(intent, 1);
+                Intent intent = new Intent(RejectActivity.this, RejectReasonActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 1);
             }
         });
         //清空驳回原因
@@ -103,8 +100,6 @@ public class RejectActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mList.clear();
-                rejectReason1="";
-                rejectReason2="";
                 textRejectReason1.setText(" ");
                 textRejectReason2.setText(" ");
             }
@@ -113,11 +108,11 @@ public class RejectActivity extends BaseActivity {
         spinnerReprocess.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                reprocessJson=new JSONObject();
+                reprocessJson = new JSONObject();
                 reprocessJson.put("beforeProcessId", reprocessList.get(position).getBeforeProcessId());
-                reprocessJson.put("threeProcessCode",reprocessList.get(position).getThreeProcessCode());
-                reprocessJson.put("threeProcessName",reprocessList.get(position).getThreeProcessName());
-                Log.e("reprocessJson",reprocessJson.toString());
+                reprocessJson.put("threeProcessCode", reprocessList.get(position).getThreeProcessCode());
+                reprocessJson.put("threeProcessName", reprocessList.get(position).getThreeProcessName());
+                Log.e("reprocessJson", reprocessJson.toString());
 
             }
 
@@ -127,21 +122,21 @@ public class RejectActivity extends BaseActivity {
             }
         });
 
-        handler=new Handler(){
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-               switch (msg.what){
-                   case 0:
-                       ReprocessAdapter reprocessAdapter =new ReprocessAdapter(RejectActivity.this);
-                       spinnerReprocess.setAdapter(reprocessAdapter);
-                       break;
-                   case 1:
-                       textRejectReason1.setText(rejectReason1.substring(0, rejectReason1.length()-1));
-                       textRejectReason2.setText(rejectReason2.substring(0, rejectReason2.length()-1));
-                       break;
-                   default:
-                       break;
-               }
+                switch (msg.what) {
+                    case 0:
+                        ReprocessAdapter reprocessAdapter = new ReprocessAdapter(RejectActivity.this);
+                        spinnerReprocess.setAdapter(reprocessAdapter);
+                        break;
+                    case 1:
+                        textRejectReason1.setText(rejectReason1);
+                        textRejectReason2.setText(rejectReason2);
+                        break;
+                    default:
+                        break;
+                }
 
             }
         };
@@ -155,7 +150,7 @@ public class RejectActivity extends BaseActivity {
                 qualityProductJson.put("workShop", qualityProduct.getWorkShop());
                 qualityProductJson.put("flowLine", qualityProduct.getFlowLine());
                 qualityProductJson.put("zstatu", qualityProduct.getZstatu());
-                qualityProductJson.put("proceState", "5");
+                qualityProductJson.put("proceState", qualityProduct.getProceState());
                 qualityProductJson.put("sofaName", qualityProduct.getSofaName());
                 qualityProductJson.put("sofaModel", qualityProduct.getSofaModel());
                 qualityProductJson.put("employeeNumber", qualityProduct.getEmployeeNumber());
@@ -166,13 +161,13 @@ public class RejectActivity extends BaseActivity {
                 qualityProductJson.put("customerMark", qualityProduct.getCustomerMark());
                 Log.e("qualityProductJson", qualityProductJson.toString());
 //                提交网络数据的根节点
-                allJson=new JSONObject();
+                allJson = new JSONObject();
                 rejectJson = new JSONObject();
                 rejectJson.put("qualityProductJson", qualityProductJson);
                 rejectJson.put("reprocessJson", reprocessJson);
                 rejectJson.put("rejectReasonJson", rejectReasonJson);
                 allJson.put("allJson", rejectJson);
-                Log.e("allJson",allJson.toString());
+                Log.e("allJson", allJson.toString());
 
 
                 params.put("rejectJson", rejectJson.toString());
@@ -200,9 +195,7 @@ public class RejectActivity extends BaseActivity {
                 reprocessList.clear();
                 mList.clear();
                 rejectJson.clear();
-                Intent intent=new Intent();
-                intent.setClass(RejectActivity.this,LinkQualityActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -211,46 +204,44 @@ public class RejectActivity extends BaseActivity {
 
 
     @SuppressWarnings("unchecked")
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	    mList =  (ArrayList<MassQus>) data.getSerializableExtra("massList");
-            JSONArray massAraay=new JSONArray();
-    		for(int i=0;i<mList.size();i++){  
-    			MassQus mass = mList.get(i);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mList = (ArrayList<MassQus>) data.getSerializableExtra("massList");
+        JSONArray massAraay = new JSONArray();
+        for (int i = 0; i < mList.size(); i++) {
+            MassQus mass = mList.get(i);
 //                提交到网络
-                JSONObject massObject=new JSONObject();
-                massObject.put("massQus",mass.getMassQus());
-                massObject.put("monly",mass.getMonly());
-                massAraay.add(massObject);
+            JSONObject massObject = new JSONObject();
+            massObject.put("massQus", mass.getMassQus());
+            massObject.put("monly", mass.getMonly());
+            massAraay.add(massObject);
 
 //                传到UI线程
-                rejectReason1=rejectReason1+mass.getMassQus()+",";
-                rejectReason2=rejectReason2+mass.getMonly()+",";
-                handler.sendEmptyMessage(1);
-    	        Log.e("RESULT", "GET=====" +rejectReason1 + "," + rejectReason2);
-    	     }
-            rejectReasonJson=new JSONObject();
-            rejectReasonJson.put("rejectReasonJson",massAraay);
-            Log.e("rejectReasonJson", massAraay.toString());
-	}
+            rejectReason1 = rejectReason1 + "," + mass.getMassQus();
+            rejectReason2 = rejectReason2 + "," + mass.getMonly();
+            handler.sendEmptyMessage(1);
+            Log.e("RESULT", "GET=====" + rejectReason1 + "," + rejectReason2);
+        }
+        rejectReasonJson = new JSONObject();
+        rejectReasonJson.put("rejectReasonJson", massAraay);
+        Log.e("rejectReasonJson", massAraay.toString());
+    }
 
-	private void initDate() {
+    private void initDate() {
 
-        Intent intent=getIntent();
-        Bundle bundle=intent.getExtras();
-        qualityProduct= (QualityProduct) bundle.get("qualityProduct");
-        aSyncHttpClient.post(RequestURL.BASEURL+RequestURL.REPROCESS, params,new AsyncHttpResponseHandler()
-        {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        qualityProduct = (QualityProduct) bundle.get("qualityProduct");
+        aSyncHttpClient.post(RequestURL.BASEURL + RequestURL.REPROCESS, params, new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(String content)
-            {
-                if(!"false".equals(content.trim())){
-                    JSONObject jsonObject= JSON.parseObject(content);
-                    JSONArray jsonArray=jsonObject.getJSONArray("list");
-                    reprocessList=new ArrayList<Reprocess>();
-                    for(int i=0;i<jsonArray.size();i++){
-                        JSONObject object=jsonArray.getJSONObject(i);
-                        Reprocess reprocess=new Reprocess();
+            public void onSuccess(String content) {
+                if (!"false".equals(content.trim())) {
+                    JSONObject jsonObject = JSON.parseObject(content);
+                    JSONArray jsonArray = jsonObject.getJSONArray("list");
+                    reprocessList = new ArrayList<Reprocess>();
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        Reprocess reprocess = new Reprocess();
                         reprocess.setBeforeProcessId(object.getString("beforeProcessId"));
                         reprocess.setBeforeProcessName(object.getString("beforeProcessName"));
                         reprocess.setThreeProcessCode(object.getString("threeProcessCode"));
@@ -258,14 +249,13 @@ public class RejectActivity extends BaseActivity {
                         reprocessList.add(reprocess);
                         handler.sendEmptyMessage(0);
 
-                }
+                    }
                 }
 
             }
 
             @Override
-            public void onFailure(Throwable error)
-            {
+            public void onFailure(Throwable error) {
                 Toast.makeText(context, "网络访问异常，检测是否开启网络", Toast.LENGTH_SHORT).show();
             }
         });
@@ -302,7 +292,7 @@ public class RejectActivity extends BaseActivity {
 
     }
 
-    class ReprocessAdapter extends  BaseAdapter{
+    class ReprocessAdapter extends BaseAdapter {
         LayoutInflater mInflater;
         Context context;
 
@@ -328,25 +318,25 @@ public class RejectActivity extends BaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            ViewHolder viewHolder=null;
-            if(convertView==null){
-                viewHolder=new ViewHolder();
-                mInflater= LayoutInflater.from(context);
-                convertView=mInflater.inflate(R.layout.spinner_reprocess, null);
-                viewHolder.textView=(TextView) convertView.findViewById(R.id.text_reprocess_name);
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
+                viewHolder = new ViewHolder();
+                mInflater = LayoutInflater.from(context);
+                convertView = mInflater.inflate(R.layout.spinner_reprocess, null);
+                viewHolder.textView = (TextView) convertView.findViewById(R.id.text_reprocess_name);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder=(ViewHolder) convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
             //设置数据
-            final  Reprocess reprocess=reprocessList.get(position);
+            final Reprocess reprocess = reprocessList.get(position);
             viewHolder.textView.setText(reprocess.getThreeProcessName());
 
             return convertView;
         }
 
-        class ViewHolder{
+        class ViewHolder {
             public TextView textView;
         }
     }

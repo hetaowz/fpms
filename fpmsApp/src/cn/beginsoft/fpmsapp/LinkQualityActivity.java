@@ -30,13 +30,12 @@ public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
 	private Context context=null;
-	List<QualityProduct> qualityProductList=new ArrayList<QualityProduct>();
+	List<QualityProduct> qualityProductList;
 	//当前活动用户的下拉列表
 	private Spinner spnActiveUser = null; 
 	//对应的适配器
 	private ArrayAdapter<UserSpn> adapterActiveUser = null; 
 	public Handler handler;
-	private DataAdapter dataAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +184,7 @@ public class LinkQualityActivity extends BaseActivity {
 			@Override
 			public void handleMessage(Message msg) {
 				if(msg.what==0){
-					dataAdapter=new DataAdapter(LinkQualityActivity.this);
+					DataAdapter dataAdapter=new DataAdapter(LinkQualityActivity.this);
 					listView.setAdapter(dataAdapter);
 				}
 			}
@@ -195,11 +194,7 @@ public class LinkQualityActivity extends BaseActivity {
 	class DataAdapter extends BaseAdapter{
 		LayoutInflater mInflater;
 		Context context;
-
-		@Override
-		public void notifyDataSetChanged() {
-			super.notifyDataSetChanged();
-		}
+		
 
 		public DataAdapter(Context context) {
 			super();
@@ -278,7 +273,7 @@ public class LinkQualityActivity extends BaseActivity {
 					qualityProductJson.put("workShop", qualityProduct.getWorkShop());
 					qualityProductJson.put("flowLine", qualityProduct.getFlowLine());
 					qualityProductJson.put("zstatu", qualityProduct.getZstatu());
-					qualityProductJson.put("proceState", "3");
+					qualityProductJson.put("proceState", qualityProduct.getProceState());
 					qualityProductJson.put("sofaName", qualityProduct.getSofaName());
 					qualityProductJson.put("sofaModel", qualityProduct.getSofaModel());
 					qualityProductJson.put("employeeNumber", qualityProduct.getEmployeeNumber());
@@ -348,5 +343,5 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 
-	
+
 }

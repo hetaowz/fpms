@@ -21,6 +21,6 @@ public class RequestURL {
 	public static final String REJECTREASON="SfPpzjianControllerForApp.do?datagridForReasonApp&interfaceName=datagridForApp";
 	public static final String REPROCESS="SfPpzjianControllerForApp.do?datagridForProcessApp&interfaceName=datagridForApp";
 	public static final String REJECTCONFIRM="SfPpQualityControllerForApp.do?updateTaskForApp&interfaceName=datagridForApp";
-	public static final String QUALITYCONFIRM="SfPpQualityControllerForApp.do?updateTaskForApp&interfaceName=datagridForApp";
+	public static final String QUALITYCONFIRM="";
 
 }
