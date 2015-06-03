@@ -2,35 +2,39 @@ package cn.beginsoft.fpmsapp;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.annotation.SuppressLint;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ta.util.http.AsyncHttpResponseHandler;
+
 import org.beginsoft.common.ActiveUser;
 import org.beginsoft.common.RequestURL;
 import org.beginsoft.fpmsapp.base.BaseActivity;
 import org.beginsoft.vo.UserSpn;
+
 import android.os.Bundle;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+
 import org.beginsoft.vo.QualityProduct;
 
 public class LinkQualityActivity extends BaseActivity {
 
 	private ListView listView;
 	private Context context=null;
-	List<QualityProduct> qualityProductList;
+	List<QualityProduct> qualityProductList=new ArrayList<QualityProduct>();;
 	//当前活动用户的下拉列表
 	private Spinner spnActiveUser = null; 
 	//对应的适配器
@@ -45,8 +49,6 @@ public class LinkQualityActivity extends BaseActivity {
 		initView();
 		LoginCheck();
 		menuInit();
-		initData();
-		initEvent();		
 	}
 	
     /**
@@ -138,7 +140,7 @@ public class LinkQualityActivity extends BaseActivity {
 					Log.e("content", content);
 					JSONObject jsonObject = JSON.parseObject(content);
 					JSONArray jsonArray=jsonObject.getJSONArray("list");
-					qualityProductList=new ArrayList<QualityProduct>();
+//					qualityProductList=new ArrayList<QualityProduct>();
 
 					for(int i=0;i<jsonArray.size();i++){
 
@@ -290,8 +292,11 @@ public class LinkQualityActivity extends BaseActivity {
 						@Override
 						public void onSuccess(String content) {
 							if (!"false".equals(content.trim())) {
-								finish();
-
+								Intent intent=new Intent(context,LinkQualityActivity.class);
+								intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								startActivityForResult(intent, 0);
+							}else{
+								Toast.makeText(context,"操作异常，请联系管理员", Toast.LENGTH_SHORT).show();
 							}
 
 						}
@@ -344,10 +349,11 @@ public class LinkQualityActivity extends BaseActivity {
 		
 	}
 
-//	@Override
-//	protected void onStart() {
-//		super.onStart();
-//		qualityProductList.clear();
-//		initData();
-//	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		qualityProductList.clear();
+		initData();
+		initEvent();
+	}
 }

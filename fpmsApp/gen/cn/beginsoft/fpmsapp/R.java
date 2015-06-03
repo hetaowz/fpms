@@ -48,7 +48,7 @@ public final class R {
         public static final int wp_small_over=0x7f02000c;
     }
     public static final class id {
-        public static final int action_settings=0x7f09006a;
+        public static final int action_settings=0x7f09006b;
         public static final int bnt_anno=0x7f090053;
         public static final int bnt_task=0x7f090055;
         public static final int bnt_userinfo=0x7f090059;
@@ -69,10 +69,10 @@ public final class R {
         public static final int choose_type=0x7f09002c;
         public static final int content_anno_detail=0x7f090060;
         public static final int current_number=0x7f09001e;
-        public static final int day=0x7f090067;
+        public static final int day=0x7f090068;
         public static final int et_password=0x7f090029;
         public static final int et_username=0x7f090028;
-        public static final int hour=0x7f090068;
+        public static final int hour=0x7f090069;
         public static final int id_iv_tabline=0x7f09005e;
         public static final int id_layout_head=0x7f090019;
         public static final int list_link_quality=0x7f090002;
@@ -84,8 +84,8 @@ public final class R {
         public static final int ll_task_receivable=0x7f09005a;
         public static final int ll_task_starting=0x7f09005c;
         public static final int ll_userinfo=0x7f090058;
-        public static final int min=0x7f090069;
-        public static final int month=0x7f090066;
+        public static final int min=0x7f09006a;
+        public static final int month=0x7f090067;
         public static final int noticeId=0x7f090042;
         public static final int noticeListView=0x7f090007;
         public static final int noticeTime=0x7f090041;
@@ -115,12 +115,13 @@ public final class R {
         public static final int text_re_process_employee=0x7f09000f;
         public static final int text_reject_reason1=0x7f090013;
         public static final int text_reject_reason2=0x7f090014;
+        public static final int text_reprocess_name=0x7f090064;
         public static final int text_self_num=0x7f090011;
         public static final int text_total_counter=0x7f090009;
         public static final int text_type=0x7f09002d;
         public static final int text_typeName=0x7f090045;
         public static final int text_typeNum=0x7f090043;
-        public static final int timePicker1=0x7f090064;
+        public static final int timePicker1=0x7f090065;
         public static final int title_act_main=0x7f090003;
         public static final int title_act_task=0x7f090023;
         public static final int title_act_userinfo=0x7f090027;
@@ -154,7 +155,7 @@ public final class R {
         public static final int tv_sofaName=0x7f090049;
         public static final int tv_task_receivable=0x7f09005b;
         public static final int tv_task_starting=0x7f09005d;
-        public static final int year=0x7f090065;
+        public static final int year=0x7f090066;
     }
     public static final class layout {
         public static final int activity_link_quality=0x7f030000;
@@ -172,7 +173,8 @@ public final class R {
         public static final int menu_bottom=0x7f03000c;
         public static final int menu_top_task=0x7f03000d;
         public static final int noitce_detail=0x7f03000e;
-        public static final int timepicker=0x7f03000f;
+        public static final int spinner_reprocess=0x7f03000f;
+        public static final int timepicker=0x7f030010;
     }
     public static final class menu {
         public static final int link_quality=0x7f080000;
